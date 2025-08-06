@@ -1,9 +1,9 @@
 import { Instagram, Twitter, Linkedin } from 'lucide-react';
 export const PortfolioHeader = () => {
   return <header className="relative z-10 pt-12 pb-20">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 flex flex-col gap-3">
         {/* Logo */}
-        <div className="text-center mb-16">
+        <div className="text-center">
           <h1 className="text-hero font-light tracking-widest">
             LENS & LIGHT
           </h1>
@@ -14,7 +14,7 @@ export const PortfolioHeader = () => {
         
 
         {/* Navigation Menu */}
-        <nav className="mb-12">
+        <nav>
           <ul className="flex justify-center space-x-12 text-body font-medium tracking-wider">
             <li>
               <a href="#" className="hover:text-text-primary transition-colors duration-300 relative group">
