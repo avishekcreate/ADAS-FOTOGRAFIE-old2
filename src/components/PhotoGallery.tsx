@@ -16,7 +16,6 @@ interface Photo {
   title: string;
   description: string;
   gridClass: string;
-  animationClass: string;
 }
 
 const photos: Photo[] = [
@@ -25,57 +24,55 @@ const photos: Photo[] = [
     image: portrait1,
     title: "Soulful Gaze",
     description: "A portrait that captures the depth of human emotion through dramatic lighting and intimate composition.",
-    gridClass: "md:col-span-1 md:row-span-2",
-    animationClass: "photo-float"
+    gridClass: "md:col-span-1 md:row-span-2"
   },
   {
     id: 2,
     image: landscape1,
     title: "Misty Dawn",
     description: "The serene beauty of mountain peaks emerging from morning mist, a meditation on nature's quiet power.",
-    gridClass: "md:col-span-2 md:row-span-1",
-    animationClass: "photo-float-delayed"
+    gridClass: "md:col-span-2 md:row-span-1"
   },
   {
     id: 3,
     image: architecture1,
     title: "Urban Geometry",
     description: "Abstract architectural forms that celebrate the intersection of human design and natural light.",
-    gridClass: "md:col-span-1 md:row-span-1",
-    animationClass: "photo-float-slow"
+    gridClass: "md:col-span-1 md:row-span-1"
   },
   {
     id: 4,
     image: street1,
     title: "City Stories",
     description: "Candid moments from urban life, capturing the authentic spirit of human connection in public spaces.",
-    gridClass: "md:col-span-2 md:row-span-1",
-    animationClass: "photo-float"
+    gridClass: "md:col-span-2 md:row-span-1"
   },
   {
     id: 5,
     image: nature1,
     title: "Morning Dew",
     description: "Macro photography revealing the intricate beauty of nature's smallest details and textures.",
-    gridClass: "md:col-span-1 md:row-span-1",
-    animationClass: "photo-float-delayed"
+    gridClass: "md:col-span-1 md:row-span-1"
   },
   {
     id: 6,
     image: abstract1,
     title: "Ethereal Flow",
     description: "Abstract forms in motion, exploring the boundary between photography and visual poetry.",
-    gridClass: "md:col-span-1 md:row-span-2",
-    animationClass: "photo-float-slow"
+    gridClass: "md:col-span-1 md:row-span-2"
   }
 ];
 
 export const PhotoGallery = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   
-  // Shuffle photos for dynamic layout
-  const shuffledPhotos = useMemo(() => {
-    return [...photos].sort(() => Math.random() - 0.5);
+  // Create columns for clean layout
+  const photoColumns = useMemo(() => {
+    const columns = [[], [], [], []] as Photo[][];
+    photos.forEach((photo, index) => {
+      columns[index % 4].push(photo);
+    });
+    return columns;
   }, []);
 
   const handlePhotoClick = (photo: Photo) => {
@@ -90,16 +87,20 @@ export const PhotoGallery = () => {
     <>
       <section className="px-6 pb-20">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
-            {shuffledPhotos.map((photo) => (
-              <div key={photo.id} className={photo.gridClass}>
-                <PhotoCard
-                  image={photo.image}
-                  title={photo.title}
-                  description={photo.description}
-                  animationClass={photo.animationClass}
-                  onClick={() => handlePhotoClick(photo)}
-                />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {photoColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className={`space-y-6 animate-vertical-float-${columnIndex + 1}`}>
+                {column.map((photo) => (
+                  <div key={photo.id}>
+                    <PhotoCard
+                      image={photo.image}
+                      title={photo.title}
+                      description={photo.description}
+                      animationClass=""
+                      onClick={() => handlePhotoClick(photo)}
+                    />
+                  </div>
+                ))}
               </div>
             ))}
           </div>

@@ -105,17 +105,21 @@
 }
 
 @layer components {
-  /* Photo animation keyframes */
-  .photo-float {
-    animation: float 8s ease-in-out infinite;
+  /* Vertical floating animations for columns */
+  .animate-vertical-float-1 {
+    animation: verticalFloat1 8s ease-in-out infinite;
   }
   
-  .photo-float-delayed {
-    animation: float 8s ease-in-out infinite 2s;
+  .animate-vertical-float-2 {
+    animation: verticalFloat2 9s ease-in-out infinite;
   }
   
-  .photo-float-slow {
-    animation: float 12s ease-in-out infinite 4s;
+  .animate-vertical-float-3 {
+    animation: verticalFloat3 7s ease-in-out infinite;
+  }
+  
+  .animate-vertical-float-4 {
+    animation: verticalFloat4 10s ease-in-out infinite;
   }
   
   /* Hover overlay transitions */
@@ -152,19 +156,24 @@
 
 @layer utilities {
   /* Custom animation keyframes */
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px) translateX(0px);
-    }
-    25% {
-      transform: translateY(-10px) translateX(5px);
-    }
-    50% {
-      transform: translateY(0px) translateX(-8px);
-    }
-    75% {
-      transform: translateY(8px) translateX(3px);
-    }
+  @keyframes verticalFloat1 {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes verticalFloat2 {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(25px); }
+  }
+  
+  @keyframes verticalFloat3 {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  
+  @keyframes verticalFloat4 {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(30px); }
   }
   
   @keyframes fadeIn {
