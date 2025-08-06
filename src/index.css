@@ -215,4 +215,40 @@
     @apply text-xs font-medium uppercase tracking-wider;
     color: hsl(var(--text-subtle));
   }
+  /* Vertical floating animations for photo columns */
+  @keyframes vertical-float-1 {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  
+  @keyframes vertical-float-2 {
+    0%, 100% { transform: translateY(-10px); }
+    50% { transform: translateY(5px); }
+  }
+  
+  @keyframes vertical-float-3 {
+    0%, 100% { transform: translateY(5px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  @keyframes vertical-float-4 {
+    0%, 100% { transform: translateY(-5px); }
+    50% { transform: translateY(10px); }
+  }
+  
+  .animate-vertical-float-1 {
+    animation: vertical-float-1 8s ease-in-out infinite;
+  }
+  
+  .animate-vertical-float-2 {
+    animation: vertical-float-2 10s ease-in-out infinite;
+  }
+  
+  .animate-vertical-float-3 {
+    animation: vertical-float-3 12s ease-in-out infinite;
+  }
+  
+  .animate-vertical-float-4 {
+    animation: vertical-float-4 9s ease-in-out infinite;
+  }
 }

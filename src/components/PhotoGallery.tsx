@@ -4,11 +4,21 @@ import { PhotoModal } from './PhotoModal';
 
 // Import images
 import portrait1 from '@/assets/portrait-1.jpg';
+import portrait2 from '@/assets/portrait-2.jpg';
+import portrait3 from '@/assets/portrait-3.jpg';
 import landscape1 from '@/assets/landscape-1.jpg';
+import landscape2 from '@/assets/landscape-2.jpg';
 import architecture1 from '@/assets/architecture-1.jpg';
+import architecture2 from '@/assets/architecture-2.jpg';
 import street1 from '@/assets/street-1.jpg';
+import street2 from '@/assets/street-2.jpg';
 import nature1 from '@/assets/nature-1.jpg';
+import nature2 from '@/assets/nature-2.jpg';
 import abstract1 from '@/assets/abstract-1.jpg';
+import abstract2 from '@/assets/abstract-2.jpg';
+import wildlife1 from '@/assets/wildlife-1.jpg';
+import automotive1 from '@/assets/automotive-1.jpg';
+import interior1 from '@/assets/interior-1.jpg';
 
 interface Photo {
   id: number;
@@ -60,6 +70,76 @@ const photos: Photo[] = [
     title: "Ethereal Flow",
     description: "Abstract forms in motion, exploring the boundary between photography and visual poetry.",
     gridClass: "md:col-span-1 md:row-span-2"
+  },
+  {
+    id: 7,
+    image: portrait2,
+    title: "Window Light",
+    description: "Soft natural light creates a timeless portrait capturing authentic beauty and grace.",
+    gridClass: "md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 8,
+    image: landscape2,
+    title: "Rolling Hills",
+    description: "Minimalist landscape photography showcasing the power of simplicity and negative space.",
+    gridClass: "md:col-span-2 md:row-span-1"
+  },
+  {
+    id: 9,
+    image: architecture2,
+    title: "Concrete Dreams",
+    description: "Brutalist architecture transformed into abstract art through careful composition and lighting.",
+    gridClass: "md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 10,
+    image: street2,
+    title: "Rain Stories",
+    description: "Urban poetry captured in a moment of weather, revealing the beauty in everyday scenes.",
+    gridClass: "md:col-span-1 md:row-span-2"
+  },
+  {
+    id: 11,
+    image: nature2,
+    title: "Water's Edge",
+    description: "Macro exploration of nature's delicate patterns and the poetry found in morning dew.",
+    gridClass: "md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 12,
+    image: abstract2,
+    title: "Smoke Dance",
+    description: "Abstract photography exploring the ephemeral beauty of smoke and light interaction.",
+    gridClass: "md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 13,
+    image: wildlife1,
+    title: "Freedom Flight",
+    description: "Wildlife photography capturing the grace and power of birds in their natural element.",
+    gridClass: "md:col-span-1 md:row-span-2"
+  },
+  {
+    id: 14,
+    image: automotive1,
+    title: "Classic Lines",
+    description: "Automotive photography celebrating the timeless design of vintage automobiles.",
+    gridClass: "md:col-span-2 md:row-span-1"
+  },
+  {
+    id: 15,
+    image: portrait3,
+    title: "Weathered Wisdom",
+    description: "A portrait study exploring the beauty of age and the stories written in weathered hands.",
+    gridClass: "md:col-span-1 md:row-span-1"
+  },
+  {
+    id: 16,
+    image: interior1,
+    title: "Light & Shadow",
+    description: "Architectural interior photography focusing on the interplay of natural light and space.",
+    gridClass: "md:col-span-1 md:row-span-1"
   }
 ];
 
