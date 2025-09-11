@@ -92,26 +92,32 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
     if (!containerRef.current || !autoplay) return;
 
     const container = containerRef.current;
-    const scrollHeight = container.scrollHeight;
-    const clientHeight = container.clientHeight;
-    const maxScroll = scrollHeight - clientHeight;
-
-    // Create infinite scroll animation
-    animationRef.current = gsap.to(container, {
-      scrollTop: maxScroll,
-      duration: maxScroll / (autoplaySpeed * 50), // Adjust speed
-      ease: "none",
-      repeat: -1,
-      onRepeat: () => {
-        // Reset to top when reaching bottom
-        container.scrollTop = 0;
-      }
+    const columns = container.querySelectorAll('.column');
+    
+    columns.forEach((column, index) => {
+      const scrollHeight = column.scrollHeight;
+      const clientHeight = column.clientHeight;
+      const maxScroll = scrollHeight - clientHeight;
+      
+      // Alternating scroll directions: down, up, down, up
+      const direction = index % 2 === 0 ? 1 : -1;
+      const startValue = direction === 1 ? 0 : maxScroll;
+      const endValue = direction === 1 ? maxScroll : 0;
+      
+      column.scrollTop = startValue;
+      
+      gsap.to(column, {
+        scrollTop: endValue,
+        duration: maxScroll / (autoplaySpeed * 30),
+        ease: "none",
+        repeat: -1,
+        yoyo: true,
+        delay: index * 0.5 // Stagger the animations
+      });
     });
 
     return () => {
-      if (animationRef.current) {
-        animationRef.current.kill();
-      }
+      gsap.killTweensOf('.column');
     };
   }, [autoplay, autoplaySpeed]);
 
@@ -147,36 +153,51 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
     <>
       <div 
         ref={containerRef}
-        className="h-screen overflow-y-auto scrollbar-hide"
+        className="h-screen overflow-hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none'
-        }}
       >
-        <div className="container mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {columnPhotos.map((columnItems, columnIndex) => (
-              <div key={columnIndex} className="space-y-6">
-                {columnItems.map((photo, photoIndex) => (
-                  <div
-                    key={photo.id}
-                    style={{
-                      height: `${Math.random() * 200 + 300}px` // Random heights between 300-500px
-                    }}
-                  >
-                    <PhotoCard
-                      image={photo.image}
-                      title={photo.title}
-                      description={photo.description}
-                      onClick={() => handlePhotoClick(photo)}
-                      animationClass={`animate-vertical-float-${(columnIndex % 4) + 1}`}
-                    />
+        <div className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-screen">
+            {columnPhotos.map((columnItems, columnIndex) => {
+              // Size configuration: middle columns (0,1) bigger, outer columns (2,3) smaller
+              const isMiddleColumn = columnIndex === 0 || columnIndex === 1;
+              const baseHeight = isMiddleColumn ? 350 : 250;
+              const heightVariation = isMiddleColumn ? 150 : 100;
+              
+              return (
+                <div 
+                  key={columnIndex} 
+                  className="column overflow-y-auto scrollbar-hide h-full"
+                  style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none'
+                  }}
+                >
+                  <div className="space-y-4 pb-96">
+                    {columnItems.map((photo) => {
+                      const randomHeight = Math.floor(Math.random() * heightVariation) + baseHeight;
+                      
+                      return (
+                        <div
+                          key={photo.id}
+                          className="flex-shrink-0"
+                          style={{ height: `${randomHeight}px` }}
+                        >
+                          <PhotoCard
+                            image={photo.image}
+                            title={photo.title}
+                            description={photo.description}
+                            onClick={() => handlePhotoClick(photo)}
+                            animationClass=""
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -1,31 +1,22 @@
 import { PortfolioHeader } from '@/components/PortfolioHeader';
 import { InfiniteScrollGallery } from '@/components/InfiniteScrollGallery';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { LiquidEtherBackground } from '@/components/LiquidEtherBackground';
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen">
-      {/* Liquid Ether Background */}
-      <LiquidEtherBackground />
+    <div className="min-h-screen">
+      {/* Theme toggle */}
+      <ThemeToggle />
       
-      {/* Content overlay */}
-      <div className="relative z-10">
-        {/* Theme toggle */}
-        <ThemeToggle />
-        
-        {/* Header section */}
-        <div className="relative z-20">
-          <PortfolioHeader />
-        </div>
-        
-        {/* Infinite scroll photo gallery */}
-        <InfiniteScrollGallery 
-          autoplay={true}
-          autoplaySpeed={1}
-          pauseOnHover={true}
-        />
-      </div>
+      {/* Header section */}
+      <PortfolioHeader />
+      
+      {/* Infinite scroll photo gallery */}
+      <InfiniteScrollGallery 
+        autoplay={true}
+        autoplaySpeed={1}
+        pauseOnHover={true}
+      />
     </div>
   );
 };
