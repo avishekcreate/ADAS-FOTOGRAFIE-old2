@@ -158,12 +158,12 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
         onMouseLeave={handleMouseLeave}
       >
         <div className="container mx-auto px-6 py-8 relative">
-          {/* Top gradient overlay */}
-          <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
+          {/* Top gradient overlay - enhanced blending */}
+          <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-background via-background/80 to-transparent z-10 pointer-events-none" />
           
-          {/* Bottom gradient overlay */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-screen">
+          {/* Bottom gradient overlay - enhanced blending */}
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent z-10 pointer-events-none" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 h-screen">
             {columnPhotos.map((columnItems, columnIndex) => {
               // Size configuration: middle columns (0,1) bigger, outer columns (2,3) smaller
               const isMiddleColumn = columnIndex === 0 || columnIndex === 1;
@@ -179,15 +179,18 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
                     msOverflowStyle: 'none'
                   }}
                 >
-                  <div className="space-y-4 pb-96">
+                  <div className="space-y-6 pb-96">
                     {columnItems.map((photo) => {
                       const randomHeight = Math.floor(Math.random() * heightVariation) + baseHeight;
                       
                       return (
                         <div
                           key={photo.id}
-                          className="flex-shrink-0"
-                          style={{ height: `${randomHeight}px` }}
+                          className="flex-shrink-0 mb-6"
+                          style={{ 
+                            height: `${randomHeight}px`,
+                            minHeight: `${randomHeight}px`
+                          }}
                         >
                           <PhotoCard
                             image={photo.image}

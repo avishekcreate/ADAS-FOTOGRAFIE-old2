@@ -1,6 +1,8 @@
 import { Instagram, Twitter, Linkedin } from 'lucide-react';
 export const PortfolioHeader = () => {
   return <header className="relative z-10 pt-12 pb-20">
+      {/* Header gradient overlay */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none" />
       <div className="container mx-auto px-6 flex flex-col gap-3">
         {/* Logo */}
         <div className="text-center">
