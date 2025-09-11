@@ -1,27 +1,31 @@
 import { PortfolioHeader } from '@/components/PortfolioHeader';
-import { PhotoGallery } from '@/components/PhotoGallery';
+import { InfiniteScrollGallery } from '@/components/InfiniteScrollGallery';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { LiquidEtherBackground } from '@/components/LiquidEtherBackground';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Theme toggle */}
-      <ThemeToggle />
+    <div className="relative min-h-screen">
+      {/* Liquid Ether Background */}
+      <LiquidEtherBackground />
       
-      {/* Header section */}
-      <PortfolioHeader />
-      
-      {/* Photo gallery */}
-      <PhotoGallery />
-      
-      {/* Footer */}
-      <footer className="py-16 text-center border-t border-border-subtle">
-        <div className="container mx-auto px-6">
-          <p className="text-caption tracking-wider">
-            © 2024 LENS & LIGHT PHOTOGRAPHY. ALL RIGHTS RESERVED.
-          </p>
+      {/* Content overlay */}
+      <div className="relative z-10">
+        {/* Theme toggle */}
+        <ThemeToggle />
+        
+        {/* Header section */}
+        <div className="relative z-20">
+          <PortfolioHeader />
         </div>
-      </footer>
+        
+        {/* Infinite scroll photo gallery */}
+        <InfiniteScrollGallery 
+          autoplay={true}
+          autoplaySpeed={1}
+          pauseOnHover={true}
+        />
+      </div>
     </div>
   );
 };

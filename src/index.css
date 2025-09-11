@@ -252,3 +252,13 @@
     animation: vertical-float-4 9s ease-in-out infinite;
   }
 }
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
