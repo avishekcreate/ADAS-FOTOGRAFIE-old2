@@ -125,8 +125,8 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
-  const animationRef = useRef<gsap.core.Tween>();
-
+  const animationRef = useRef<gsap.core.Tween>(); // kept for compatibility
+  const tweensRef = useRef<gsap.core.Tween[]>([]);
   // Load photos from Supabase or fallback to static images
   useEffect(() => {
     const loadPhotos = async () => {
@@ -141,45 +141,53 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
   useEffect(() => {
     if (!containerRef.current || !autoplay) return;
 
+    // Kill any existing tweens before creating new ones
+    tweensRef.current.forEach((t) => t.kill());
+    tweensRef.current = [];
+
     const container = containerRef.current;
     const columns = container.querySelectorAll(".column");
 
     columns.forEach((column, index) => {
-      const scrollHeight = column.scrollHeight;
-      const clientHeight = column.clientHeight;
-      const maxScroll = scrollHeight - clientHeight;
+      const el = column as HTMLElement;
+      const scrollHeight = el.scrollHeight;
+      const clientHeight = el.clientHeight;
+      const maxScroll = Math.max(0, scrollHeight - clientHeight);
 
       // Alternating scroll directions: down, up, down, up
       const direction = index % 2 === 0 ? 1 : -1;
       const startValue = direction === 1 ? 0 : maxScroll;
       const endValue = direction === 1 ? maxScroll : 0;
 
-      column.scrollTop = startValue;
+      el.scrollTop = startValue;
 
-      gsap.to(column, {
+      const tween = gsap.to(el, {
         scrollTop: endValue,
-        duration: maxScroll / (autoplaySpeed * 30),
+        duration: maxScroll > 0 ? maxScroll / (autoplaySpeed * 30) : 10,
         ease: "none",
         repeat: -1,
         yoyo: true,
         delay: index * 0.5, // Stagger the animations
       });
+
+      tweensRef.current.push(tween);
     });
 
     return () => {
+      tweensRef.current.forEach((t) => t.kill());
       gsap.killTweensOf(".column");
     };
-  }, [autoplay, autoplaySpeed]);
+  }, [autoplay, autoplaySpeed, photos.length]);
 
   const handleMouseEnter = () => {
-    if (pauseOnHover && animationRef.current) {
-      animationRef.current.pause();
+    if (pauseOnHover) {
+      tweensRef.current.forEach((t) => t.pause());
     }
   };
 
   const handleMouseLeave = () => {
-    if (pauseOnHover && animationRef.current) {
-      animationRef.current.resume();
+    if (pauseOnHover) {
+      tweensRef.current.forEach((t) => t.resume());
     }
   };
 
