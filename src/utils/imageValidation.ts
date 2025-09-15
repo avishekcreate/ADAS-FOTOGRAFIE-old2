@@ -13,29 +13,8 @@ export const validateImage = (file: File): Promise<{ valid: boolean; error?: str
       return;
     }
 
-    // Check image resolution
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      
-      if (img.width < 1920 || img.height < 1080) {
-        resolve({ 
-          valid: false, 
-          error: 'Image resolution must be at least 1920×1080 pixels' 
-        });
-      } else {
-        resolve({ valid: true });
-      }
-    };
-    
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      resolve({ valid: false, error: 'Invalid image file' });
-    };
-    
-    img.src = url;
+    // No resolution validation - accept any resolution
+    resolve({ valid: true });
   });
 };
 

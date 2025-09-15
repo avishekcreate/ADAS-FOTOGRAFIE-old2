@@ -182,7 +182,7 @@ const MediaItemModal = ({ isOpen, onClose, onSave, item, isLoading }: MediaItemM
                     <span className="font-semibold">Click to upload</span> or drag and drop
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    PNG, JPG, WEBP (max 50MB, min 1920×1080)
+                    PNG, JPG, WEBP (max 50MB, any resolution)
                   </p>
                 </div>
                 <input

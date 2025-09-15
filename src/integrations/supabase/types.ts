@@ -80,6 +80,54 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          about_text: string
+          author_name: string
+          created_at: string
+          email: string | null
+          facebook_url: string | null
+          id: string
+          instagram_url: string | null
+          phone: string | null
+          profile_photo_1: string | null
+          profile_photo_2: string | null
+          profile_photo_3: string | null
+          updated_at: string
+          youtube_url: string | null
+        }
+        Insert: {
+          about_text?: string
+          author_name?: string
+          created_at?: string
+          email?: string | null
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          phone?: string | null
+          profile_photo_1?: string | null
+          profile_photo_2?: string | null
+          profile_photo_3?: string | null
+          updated_at?: string
+          youtube_url?: string | null
+        }
+        Update: {
+          about_text?: string
+          author_name?: string
+          created_at?: string
+          email?: string | null
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          phone?: string | null
+          profile_photo_1?: string | null
+          profile_photo_2?: string | null
+          profile_photo_3?: string | null
+          updated_at?: string
+          youtube_url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
