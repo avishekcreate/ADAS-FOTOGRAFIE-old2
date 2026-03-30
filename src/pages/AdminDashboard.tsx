@@ -20,6 +20,9 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import type { DateRange } from 'react-day-picker';
 
+// ✅ Updated to new Supabase project URL
+const SUPABASE_STORAGE_URL = "https://fywfjhlugfyorteizurk.supabase.co/storage/v1/object/public/media";
+
 const AdminDashboard = () => {
   const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<MediaItem[]>([]);
@@ -30,7 +33,6 @@ const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalLoading, setIsModalLoading] = useState(false);
   
-  // Site settings state
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isSettingsLoading, setIsSettingsLoading] = useState(false);
@@ -84,7 +86,6 @@ const AdminDashboard = () => {
   const filterItems = () => {
     let filtered = [...mediaItems];
 
-    // Search filter
     if (searchTerm) {
       filtered = filtered.filter(item =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,13 +93,11 @@ const AdminDashboard = () => {
       );
     }
 
-    // Date range filter
     if (dateRange?.from) {
       filtered = filtered.filter(item => {
         const itemDate = new Date(item.created_at);
         const fromDate = new Date(dateRange.from!);
         const toDate = dateRange.to ? new Date(dateRange.to) : new Date();
-        
         return itemDate >= fromDate && itemDate <= toDate;
       });
     }
@@ -106,6 +105,7 @@ const AdminDashboard = () => {
     setFilteredItems(filtered);
   };
 
+  // ✅ Fixed: uses new Supabase project URL
   const uploadFile = async (file: File, path?: string): Promise<string> => {
     const fileExt = file.name.split('.').pop();
     const fileName = path || `${Date.now()}.${fileExt}`;
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
 
     if (uploadError) throw uploadError;
     
-    return `https://hxuixlxosphjfznbocui.supabase.co/storage/v1/object/public/media/${fileName}`;
+    return `${SUPABASE_STORAGE_URL}/${fileName}`;
   };
 
   const deleteFile = async (url: string) => {
@@ -132,13 +132,10 @@ const AdminDashboard = () => {
     try {
       let imagePath = selectedItem?.image_path || '';
       
-      // Upload new image if provided
       if (formData.image) {
-        // Delete old image if updating
         if (selectedItem?.image_path) {
           await deleteFile(selectedItem.image_path);
         }
-
         imagePath = await uploadFile(formData.image);
       }
 
@@ -150,7 +147,6 @@ const AdminDashboard = () => {
       };
 
       if (selectedItem) {
-        // Update existing item
         const { error } = await supabase
           .from('media_items')
           .update(itemData)
@@ -158,22 +154,15 @@ const AdminDashboard = () => {
 
         if (error) throw error;
         
-        toast({
-          title: "Success",
-          description: "Media item updated successfully",
-        });
+        toast({ title: "Success", description: "Media item updated successfully" });
       } else {
-        // Create new item
         const { error } = await supabase
           .from('media_items')
           .insert([itemData]);
 
         if (error) throw error;
         
-        toast({
-          title: "Success",
-          description: "Media item created successfully",
-        });
+        toast({ title: "Success", description: "Media item created successfully" });
       }
 
       fetchMediaItems();
@@ -185,15 +174,14 @@ const AdminDashboard = () => {
       });
     } finally {
       setIsModalLoading(false);
+      setIsModalOpen(false);
     }
   };
 
   const handleDeleteMediaItem = async (item: MediaItem) => {
     try {
-      // Delete file from storage
       await deleteFile(item.image_path);
 
-      // Delete record from database
       const { error } = await supabase
         .from('media_items')
         .delete()
@@ -201,11 +189,7 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Media item deleted successfully",
-      });
-
+      toast({ title: "Success", description: "Media item deleted successfully" });
       fetchMediaItems();
     } catch (error: any) {
       toast({
@@ -224,17 +208,14 @@ const AdminDashboard = () => {
       let profilePhoto2 = siteSettings?.profile_photo_2 || '';
       let profilePhoto3 = siteSettings?.profile_photo_3 || '';
 
-      // Upload new profile photos if provided
       if (formData.profile_photo_1) {
         if (profilePhoto1) await deleteFile(profilePhoto1);
         profilePhoto1 = await uploadFile(formData.profile_photo_1, `profile_1_${Date.now()}.${formData.profile_photo_1.name.split('.').pop()}`);
       }
-      
       if (formData.profile_photo_2) {
         if (profilePhoto2) await deleteFile(profilePhoto2);
         profilePhoto2 = await uploadFile(formData.profile_photo_2, `profile_2_${Date.now()}.${formData.profile_photo_2.name.split('.').pop()}`);
       }
-      
       if (formData.profile_photo_3) {
         if (profilePhoto3) await deleteFile(profilePhoto3);
         profilePhoto3 = await uploadFile(formData.profile_photo_3, `profile_3_${Date.now()}.${formData.profile_photo_3.name.split('.').pop()}`);
@@ -254,27 +235,19 @@ const AdminDashboard = () => {
       };
 
       if (siteSettings) {
-        // Update existing settings
         const { error } = await supabase
           .from('site_settings')
           .update(settingsData)
           .eq('id', siteSettings.id);
-
         if (error) throw error;
       } else {
-        // Create new settings
         const { error } = await supabase
           .from('site_settings')
           .insert([settingsData]);
-
         if (error) throw error;
       }
 
-      toast({
-        title: "Success",
-        description: "Site settings saved successfully",
-      });
-
+      toast({ title: "Success", description: "Site settings saved successfully" });
       fetchSiteSettings();
     } catch (error: any) {
       toast({
@@ -284,26 +257,14 @@ const AdminDashboard = () => {
       });
     } finally {
       setIsSettingsLoading(false);
+      setIsSettingsModalOpen(false);
     }
   };
 
-  const openAddModal = () => {
-    setSelectedItem(null);
-    setIsModalOpen(true);
-  };
-
-  const openEditModal = (item: MediaItem) => {
-    setSelectedItem(item);
-    setIsModalOpen(true);
-  };
-
-  const openSettingsModal = () => {
-    setIsSettingsModalOpen(true);
-  };
-
-  const handleLogout = async () => {
-    await signOut();
-  };
+  const openAddModal = () => { setSelectedItem(null); setIsModalOpen(true); };
+  const openEditModal = (item: MediaItem) => { setSelectedItem(item); setIsModalOpen(true); };
+  const openSettingsModal = () => { setIsSettingsModalOpen(true); };
+  const handleLogout = async () => { await signOut(); };
 
   if (loading) {
     return (
@@ -315,7 +276,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -328,7 +288,6 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="photos" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 max-w-md">
@@ -342,7 +301,6 @@ const AdminDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Manage Photos Tab */}
           <TabsContent value="photos" className="space-y-6">
             <Card>
               <CardHeader>
@@ -355,7 +313,6 @@ const AdminDashboard = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Search and Filter Controls */}
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1">
                     <div className="relative">
@@ -370,43 +327,19 @@ const AdminDashboard = () => {
                   </div>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full md:w-[240px] justify-start text-left font-normal",
-                          !dateRange && "text-muted-foreground"
-                        )}
-                      >
+                      <Button variant="outline" className={cn("w-full md:w-[240px] justify-start text-left font-normal", !dateRange && "text-muted-foreground")}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {dateRange?.from ? (
-                          dateRange.to ? (
-                            <>
-                              {format(dateRange.from, "LLL dd, y")} -{" "}
-                              {format(dateRange.to, "LLL dd, y")}
-                            </>
-                          ) : (
-                            format(dateRange.from, "LLL dd, y")
-                          )
-                        ) : (
-                          "Pick a date range"
-                        )}
+                          dateRange.to ? (<>{format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}</>) : format(dateRange.from, "LLL dd, y")
+                        ) : ("Pick a date range")}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        initialFocus
-                        mode="range"
-                        defaultMonth={dateRange?.from}
-                        selected={dateRange}
-                        onSelect={setDateRange}
-                        numberOfMonths={2}
-                        className="pointer-events-auto"
-                      />
+                      <Calendar initialFocus mode="range" defaultMonth={dateRange?.from} selected={dateRange} onSelect={setDateRange} numberOfMonths={2} className="pointer-events-auto" />
                     </PopoverContent>
                   </Popover>
                 </div>
 
-                {/* Media Items Table */}
                 <div className="rounded-md border">
                   <Table>
                     <TableHeader>
@@ -422,56 +355,35 @@ const AdminDashboard = () => {
                       {filteredItems.length === 0 ? (
                         <TableRow>
                           <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                            No media items found
+                            No media items found. Click "Add Media Item" to upload your first photo!
                           </TableCell>
                         </TableRow>
                       ) : (
                         filteredItems.map((item) => (
                           <TableRow key={item.id}>
-                            <TableCell>
-                              {format(new Date(item.created_at), 'MMM dd, yyyy')}
-                            </TableCell>
+                            <TableCell>{format(new Date(item.created_at), 'MMM dd, yyyy')}</TableCell>
                             <TableCell className="font-medium">{item.title}</TableCell>
                             <TableCell>
-                              <img
-                                src={item.thumbnail_path || item.image_path}
-                                alt={item.title}
-                                className="w-16 h-16 object-cover rounded"
-                              />
+                              <img src={item.thumbnail_path || item.image_path} alt={item.title} className="w-16 h-16 object-cover rounded" />
                             </TableCell>
-                            <TableCell className="font-mono text-sm">
-                              {item.id.slice(0, 8)}...
-                            </TableCell>
+                            <TableCell className="font-mono text-sm">{item.id.slice(0, 8)}...</TableCell>
                             <TableCell className="text-right">
                               <div className="flex items-center justify-end gap-2">
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  onClick={() => openEditModal(item)}
-                                >
+                                <Button variant="outline" size="sm" onClick={() => openEditModal(item)}>
                                   <Edit className="h-4 w-4" />
                                 </Button>
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
-                                    <Button variant="outline" size="sm">
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
+                                    <Button variant="outline" size="sm"><Trash2 className="h-4 w-4" /></Button>
                                   </AlertDialogTrigger>
                                   <AlertDialogContent>
                                     <AlertDialogHeader>
                                       <AlertDialogTitle>Delete Media Item</AlertDialogTitle>
-                                      <AlertDialogDescription>
-                                        Are you sure you want to delete "{item.title}"? This action cannot be undone.
-                                      </AlertDialogDescription>
+                                      <AlertDialogDescription>Are you sure you want to delete "{item.title}"? This cannot be undone.</AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction
-                                        onClick={() => handleDeleteMediaItem(item)}
-                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                      >
-                                        Delete
-                                      </AlertDialogAction>
+                                      <AlertDialogAction onClick={() => handleDeleteMediaItem(item)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
                                     </AlertDialogFooter>
                                   </AlertDialogContent>
                                 </AlertDialog>
@@ -487,7 +399,6 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Manage Page Tab */}
           <TabsContent value="settings" className="space-y-6">
             <Card>
               <CardHeader>
@@ -508,19 +419,16 @@ const AdminDashboard = () => {
                       <p><span className="font-medium">Email:</span> {siteSettings.email || 'Not set'}</p>
                       <p><span className="font-medium">Phone:</span> {siteSettings.phone || 'Not set'}</p>
                     </div>
-                    
                     <div>
                       <h3 className="text-lg font-semibold mb-2">About Text</h3>
                       <p className="text-muted-foreground whitespace-pre-line">{siteSettings.about_text}</p>
                     </div>
-                    
                     <div>
                       <h3 className="text-lg font-semibold mb-2">Social Links</h3>
                       <p><span className="font-medium">Facebook:</span> {siteSettings.facebook_url || 'Not set'}</p>
                       <p><span className="font-medium">Instagram:</span> {siteSettings.instagram_url || 'Not set'}</p>
                       <p><span className="font-medium">YouTube:</span> {siteSettings.youtube_url || 'Not set'}</p>
                     </div>
-                    
                     <div>
                       <h3 className="text-lg font-semibold mb-2">Profile Photos</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -529,9 +437,7 @@ const AdminDashboard = () => {
                             {photo ? (
                               <img src={photo} alt={`Profile ${index + 1}`} className="w-full h-full object-cover" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                                No photo
-                              </div>
+                              <div className="w-full h-full flex items-center justify-center text-muted-foreground">No photo</div>
                             )}
                           </div>
                         ))}
@@ -539,7 +445,7 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground">No site settings configured yet.</p>
+                  <p className="text-muted-foreground">No site settings configured yet. Click "Edit Settings" to add your info.</p>
                 )}
               </CardContent>
             </Card>
@@ -547,7 +453,6 @@ const AdminDashboard = () => {
         </Tabs>
       </main>
 
-      {/* Modals */}
       <MediaItemModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
