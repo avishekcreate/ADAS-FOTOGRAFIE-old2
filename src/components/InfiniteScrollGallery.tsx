@@ -21,9 +21,10 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 const fetchPhotosFromSupabase = async (): Promise<Photo[]> => {
+  // Reads from media_items — this is what the admin dashboard uploads to
   const { data, error } = await supabase
-    .from('photos')
-    .select('id, title, description, image_url')
+    .from('media_items')
+    .select('id, title, description, image_path')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -35,12 +36,12 @@ const fetchPhotosFromSupabase = async (): Promise<Photo[]> => {
 
   const photos: Photo[] = data.map((item) => ({
     id: item.id,
-    image: item.image_url,
+    image: item.image_path,
     title: item.title,
     description: item.description || "",
   }));
 
-  // Repeat to fill the infinite scroll (minimum 48 photos)
+  // Repeat photos to fill the infinite scroll (minimum 48)
   const repeated: Photo[] = [];
   const repetitions = Math.max(1, Math.ceil(48 / photos.length));
   for (let i = 0; i < repetitions; i++) {
@@ -144,7 +145,10 @@ export const InfiniteScrollGallery: React.FC<InfiniteScrollGalleryProps> = ({
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-4 opacity-60">
         <div className="text-lg">{error || "No photos available."}</div>
-        <a href="/admin/login" className="text-sm underline hover:opacity-80 transition-opacity">
+        <a
+          href="/admin/login"
+          className="text-sm underline hover:opacity-80 transition-opacity"
+        >
           Go to Admin Dashboard to add photos →
         </a>
       </div>
