@@ -23,27 +23,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Top right controls */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+      {/* Top right — theme toggle only */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
 
-        {/* Infinite Scroll Toggle — hidden on mobile */}
-        {!mobile && (
+      {/* Bottom right — infinite scroll toggle, desktop only */}
+      {!mobile && (
+        <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setInfiniteScrollOn(!infiniteScrollOn)}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium border shadow-lg transition-all duration-300 ${
               infiniteScrollOn
                 ? 'bg-foreground text-background border-foreground'
-                : 'bg-background/80 text-foreground/60 border-border hover:border-foreground/40'
+                : 'bg-background/90 text-foreground/60 border-border hover:border-foreground/40'
             }`}
             title="Toggle infinite scroll gallery"
           >
             <span className={`w-2 h-2 rounded-full transition-colors ${infiniteScrollOn ? 'bg-background' : 'bg-foreground/30'}`} />
-            Infinite
+            Infinite scroll
           </button>
-        )}
-
-        <ThemeToggle />
-      </div>
+        </div>
+      )}
 
       {/* Header */}
       <PortfolioHeader />
