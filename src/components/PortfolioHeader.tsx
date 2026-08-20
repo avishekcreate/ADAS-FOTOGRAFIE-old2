@@ -61,19 +61,19 @@ export const PortfolioHeader = () => {
         <nav>
           <ul className="flex justify-center space-x-12 text-body font-medium tracking-wider">
             <li>
-              <a href="#" className="hover:text-text-primary transition-colors duration-300 relative group">
+              <a href="/" className="hover:text-text-primary transition-colors duration-300 relative group">
                 PORTFOLIO
                 <span className="absolute bottom-0 left-0 w-0 h-px bg-text-primary transition-all duration-300 group-hover:w-full"></span>
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-text-primary transition-colors duration-300 relative group">
+              <a href="/about" className="hover:text-text-primary transition-colors duration-300 relative group">
                 ABOUT
                 <span className="absolute bottom-0 left-0 w-0 h-px bg-text-primary transition-all duration-300 group-hover:w-full"></span>
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-text-primary transition-colors duration-300 relative group">
+              <a href="/contact" className="hover:text-text-primary transition-colors duration-300 relative group">
                 CONTACT
                 <span className="absolute bottom-0 left-0 w-0 h-px bg-text-primary transition-all duration-300 group-hover:w-full"></span>
               </a>
