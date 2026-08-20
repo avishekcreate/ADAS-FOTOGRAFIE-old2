@@ -10,10 +10,10 @@ interface SiteSettings {
 }
 
 const defaultSettings: SiteSettings = {
-  author_name: "ADAS FOTOGRAFIE",
-  instagram_url: "#",
-  facebook_url: "#",
-  youtube_url: "#",
+  author_name: "Avishek Das",
+  instagram_url: "https://www.instagram.com/avishek__das/",
+  facebook_url: "https://www.facebook.com/avishek.das.3914",
+  youtube_url: "https://www.youtube.com/@ADasFOTOGRAFIE",
 };
 
 export const PortfolioHeader = () => {
